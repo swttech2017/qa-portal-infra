@@ -2,7 +2,7 @@ create schema training;
 
 alter schema training owner to postgres;
 
-create table if not exists application
+create table if not exists training.application
 (
 	id integer not null
 		constraint application_pkey
@@ -11,9 +11,9 @@ create table if not exists application
 	url varchar(255) not null
 );
 
-alter table application owner to postgres;
+alter table training.application owner to postgres;
 
-create table if not exists department
+create table if not exists training.department
 (
 	id integer not null
 		constraint department_pkey
@@ -23,9 +23,9 @@ create table if not exists department
 	display_order integer default 0 not null
 );
 
-alter table department owner to postgres;
+alter table training.department owner to postgres;
 
-create table if not exists role
+create table if not exists training.role
 (
 	id integer not null
 		constraint role_pkey
@@ -34,9 +34,9 @@ create table if not exists role
 	level integer not null
 );
 
-alter table role owner to postgres;
+alter table training.role owner to postgres;
 
-create table if not exists app_menu_item
+create table if not exists training.app_menu_item
 (
 	id integer not null
 		constraint "app-menu-item_pkey"
@@ -46,38 +46,38 @@ create table if not exists app_menu_item
 	level integer not null,
 	app_id integer not null
 		constraint fk_app_id
-			references application,
+			references training.application,
 	tooltip varchar(255)
 );
 
-alter table app_menu_item owner to postgres;
+alter table training.app_menu_item owner to postgres;
 
-create table if not exists dept_role
+create table if not exists training.dept_role
 (
 	id integer not null
 		constraint "dept-role_pkey"
 			primary key,
 	dept_id integer not null
 		constraint fk_dept_id
-			references department,
+			references training.department,
 	role_id integer not null
 		constraint fk_role_id
-			references role
+			references training.role
 );
 
-alter table dept_role owner to postgres;
+alter table training.dept_role owner to postgres;
 
-create table if not exists dept_role_application
+create table if not exists training.dept_role_application
 (
 	id integer not null
 		constraint "dept-role-application_pkey"
 			primary key,
 	dept_role_id integer not null
 		constraint fk_dept_role_id
-			references dept_role,
+			references training.dept_role,
 	app_id integer not null
 		constraint fk_app_id
-			references application
+			references training.application
 );
 
-alter table dept_role_application owner to postgres;
+alter table training.dept_role_application owner to postgres;
