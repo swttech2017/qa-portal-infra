@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  keycloak:
+    image: jboss/keycloak:latest
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_IMPORT=/tmp/realm.json
+      - DB_DATABASE=qa-portal
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    volumes:
+      - type: bind
+        source: ./keycloak/qa-portal-realm.json
+        target: /tmp/realm.json
+    depends_on:
+      - postgres
+    ports:
+      - target: 8080
+        published: 8080
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=qa-portal
+    volumes:
+      - type: bind
+        source: ./postgres
+        target: /docker-entrypoint-initdb.d
