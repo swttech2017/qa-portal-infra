@@ -15,9 +15,7 @@ services:
         target: /tmp/realm.json
     depends_on:
       - postgres
-    ports:
-      - target: 8080
-        published: 8080
+    network_mode: host
   postgres:
     image: postgres
     environment:
@@ -28,3 +26,4 @@ services:
       - type: bind
         source: ./postgres
         target: /docker-entrypoint-initdb.d
+    network_mode: host
