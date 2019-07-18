@@ -74,9 +74,11 @@ Create the schema for the qa-portal database by running the training-schema.ddl 
 
 Run the insert scripts from the qa-portal-infra/postgres folder as follows
 
-application-inserts.sql
-department-inserts.sql
-role-inserts.sql
-app_menu_item-inserts.sql
-dept_role-inserts.sql
-dept_role_application-inserts.sql
+application-inserts.sql<br>
+department-inserts.sql<br>
+role-inserts.sql<br>
+app_menu_item-inserts.sql<br>
+dept_role-inserts.sql<br>
+dept_role_application-inserts.sql<br>
+self_rating_question-inserts.sql<br>
+self_reflection_status-inserts.sql
