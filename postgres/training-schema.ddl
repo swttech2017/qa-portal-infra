@@ -1,86 +1,111 @@
-create schema training;
 
-alter schema training owner to postgres;
-
-create table if not exists application
+CREATE TABLE training.app_menu_item
 (
-	id integer not null
-		constraint application_pkey
-			primary key,
-	name varchar(255) not null,
-	url varchar(255) not null
-);
+    id integer NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    url character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    level integer NOT NULL,
+    app_id integer NOT NULL,
+    tooltip character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT "app-menu-item_pkey" PRIMARY KEY (id),
+    CONSTRAINT fk_app_id FOREIGN KEY (app_id)
+        REFERENCES training.application (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
-alter table application owner to postgres;
+ALTER TABLE training.app_menu_item
+    OWNER to postgres;
 
-create table if not exists department
+
+
+CREATE TABLE training.application
 (
-	id integer not null
-		constraint department_pkey
-			primary key,
-	name varchar(255) not null,
-	description varchar(255),
-	display_order integer default 0 not null
-);
+    id integer NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    url character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT application_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
-alter table department owner to postgres;
+ALTER TABLE training.application
+    OWNER to postgres;
 
-create table if not exists role
+
+
+CREATE TABLE training.department
 (
-	id integer not null
-		constraint role_pkey
-			primary key,
-	name varchar(255) not null,
-	level integer not null
-);
+    id integer NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(255) COLLATE pg_catalog."default",
+    display_order integer NOT NULL DEFAULT 0,
+    CONSTRAINT department_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
-alter table role owner to postgres;
+ALTER TABLE training.department
+    OWNER to postgres;
 
-create table if not exists app_menu_item
+
+
+CREATE TABLE training.dept_role
 (
-	id integer not null
-		constraint "app-menu-item_pkey"
-			primary key,
-	name varchar(255) not null,
-	url varchar(255) not null,
-	level integer not null,
-	app_id integer not null
-		constraint fk_app_id
-			references application,
-	tooltip varchar(255)
-);
+    id integer NOT NULL,
+    dept_id integer NOT NULL,
+    role_id integer NOT NULL,
+    CONSTRAINT "dept-role_pkey" PRIMARY KEY (id),
+    CONSTRAINT fk_dept_id FOREIGN KEY (dept_id)
+        REFERENCES training.department (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_role_id FOREIGN KEY (role_id)
+        REFERENCES training.role (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
-alter table app_menu_item owner to postgres;
+ALTER TABLE training.dept_role
+    OWNER to postgres;
 
-create table if not exists dept_role
+
+
+CREATE TABLE training.dept_role_application
 (
-	id integer not null
-		constraint "dept-role_pkey"
-			primary key,
-	dept_id integer not null
-		constraint fk_dept_id
-			references department,
-	role_id integer not null
-		constraint fk_role_id
-			references role
-);
+    id integer NOT NULL,
+    dept_role_id integer NOT NULL,
+    app_id integer NOT NULL,
+    CONSTRAINT "dept-role-application_pkey" PRIMARY KEY (id),
+    CONSTRAINT fk_app_id FOREIGN KEY (app_id)
+        REFERENCES training.application (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_dept_role_id FOREIGN KEY (dept_role_id)
+        REFERENCES training.dept_role (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
-alter table dept_role owner to postgres;
+ALTER TABLE training.dept_role_application
+    OWNER to postgres;
 
-create table if not exists dept_role_application
-(
-	id integer not null
-		constraint "dept-role-application_pkey"
-			primary key,
-	dept_role_id integer not null
-		constraint fk_dept_role_id
-			references dept_role,
-	app_id integer not null
-		constraint fk_app_id
-			references application
-);
-
-alter table dept_role_application owner to postgres;
 
 
 CREATE TABLE training.qa_user
@@ -90,6 +115,7 @@ CREATE TABLE training.qa_user
     reviewer_id integer,
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT qa_user_pkey PRIMARY KEY (id),
     CONSTRAINT fk_user_id FOREIGN KEY (reviewer_id)
         REFERENCES training.qa_user (id) MATCH SIMPLE
@@ -105,6 +131,7 @@ ALTER TABLE training.qa_user
     OWNER to postgres;
 
 
+
 CREATE TABLE training.qa_user_self_reflection_form
 (
     id integer NOT NULL,
@@ -116,6 +143,7 @@ CREATE TABLE training.qa_user_self_reflection_form
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
     week_commencing date NOT NULL DEFAULT CURRENT_DATE,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT qa_user_self_reflection_form_pkey PRIMARY KEY (id),
     CONSTRAINT fk_qa_user_id FOREIGN KEY (qa_user_id)
         REFERENCES training.qa_user (id) MATCH SIMPLE
@@ -131,6 +159,7 @@ ALTER TABLE training.qa_user_self_reflection_form
     OWNER to postgres;
 
 
+
 CREATE TABLE training.qa_user_self_reflection_form_status
 (
     id integer NOT NULL,
@@ -139,6 +168,7 @@ CREATE TABLE training.qa_user_self_reflection_form_status
     qa_user_id integer NOT NULL,
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT qa_user_self_reflection_form_status_pkey PRIMARY KEY (id),
     CONSTRAINT fk_qa_user_id FOREIGN KEY (qa_user_id)
         REFERENCES training.qa_user (id) MATCH SIMPLE
@@ -161,6 +191,25 @@ TABLESPACE pg_default;
 ALTER TABLE training.qa_user_self_reflection_form_status
     OWNER to postgres;
 
+
+
+CREATE TABLE training.role
+(
+    id integer NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    level integer NOT NULL,
+    CONSTRAINT role_pkey PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE training.role
+    OWNER to postgres;
+
+
+
 CREATE TABLE training.self_rating
 (
     id integer NOT NULL,
@@ -169,6 +218,7 @@ CREATE TABLE training.self_rating
     selected_rating character varying(255) COLLATE pg_catalog."default" NOT NULL,
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT self_rating_pkey PRIMARY KEY (id),
     CONSTRAINT fk_qa_user_self_reflection_form_id FOREIGN KEY (qa_user_self_reflection_form_id)
         REFERENCES training.qa_user_self_reflection_form (id) MATCH SIMPLE
@@ -188,6 +238,7 @@ ALTER TABLE training.self_rating
     OWNER to postgres;
 
 
+
 CREATE TABLE training.self_rating_question
 (
     id integer NOT NULL,
@@ -195,6 +246,7 @@ CREATE TABLE training.self_rating_question
     num_options integer NOT NULL,
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT self_rating_question_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -206,6 +258,7 @@ ALTER TABLE training.self_rating_question
     OWNER to postgres;
 
 
+
 CREATE TABLE training.self_reflection_review
 (
     id integer NOT NULL,
@@ -215,6 +268,7 @@ CREATE TABLE training.self_reflection_review
     learning_pathway character varying(4000) COLLATE pg_catalog."default" NOT NULL,
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT self_reflection_review_pkey PRIMARY KEY (id),
     CONSTRAINT fk_qa_user_id FOREIGN KEY (qa_user_id)
         REFERENCES training.qa_user (id) MATCH SIMPLE
@@ -234,12 +288,14 @@ ALTER TABLE training.self_reflection_review
     OWNER to postgres;
 
 
+
 CREATE TABLE training.self_reflection_status
 (
     id integer NOT NULL,
     status_text character varying(255) COLLATE pg_catalog."default" NOT NULL,
     last_updated_timestamp timestamp without time zone NOT NULL,
     last_updated_by character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    version integer NOT NULL DEFAULT 1,
     CONSTRAINT self_reflection_status_pkey PRIMARY KEY (id)
 )
 WITH (
