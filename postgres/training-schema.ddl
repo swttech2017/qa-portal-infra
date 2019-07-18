@@ -22,7 +22,6 @@ ALTER TABLE training.app_menu_item
     OWNER to postgres;
 
 
-
 CREATE TABLE training.application
 (
     id integer NOT NULL,
@@ -37,7 +36,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.application
     OWNER to postgres;
-
 
 
 CREATE TABLE training.department
@@ -55,7 +53,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.department
     OWNER to postgres;
-
 
 
 CREATE TABLE training.dept_role
@@ -82,7 +79,6 @@ ALTER TABLE training.dept_role
     OWNER to postgres;
 
 
-
 CREATE TABLE training.dept_role_application
 (
     id integer NOT NULL,
@@ -107,7 +103,6 @@ ALTER TABLE training.dept_role_application
     OWNER to postgres;
 
 
-
 CREATE TABLE training.qa_user
 (
     id integer NOT NULL,
@@ -129,7 +124,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.qa_user
     OWNER to postgres;
-
 
 
 CREATE TABLE training.qa_user_self_reflection_form
@@ -157,7 +151,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.qa_user_self_reflection_form
     OWNER to postgres;
-
 
 
 CREATE TABLE training.qa_user_self_reflection_form_status
@@ -192,7 +185,6 @@ ALTER TABLE training.qa_user_self_reflection_form_status
     OWNER to postgres;
 
 
-
 CREATE TABLE training.role
 (
     id integer NOT NULL,
@@ -207,7 +199,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.role
     OWNER to postgres;
-
 
 
 CREATE TABLE training.self_rating
@@ -238,7 +229,6 @@ ALTER TABLE training.self_rating
     OWNER to postgres;
 
 
-
 CREATE TABLE training.self_rating_question
 (
     id integer NOT NULL,
@@ -256,7 +246,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.self_rating_question
     OWNER to postgres;
-
 
 
 CREATE TABLE training.self_reflection_review
@@ -288,7 +277,6 @@ ALTER TABLE training.self_reflection_review
     OWNER to postgres;
 
 
-
 CREATE TABLE training.self_reflection_status
 (
     id integer NOT NULL,
@@ -305,3 +293,135 @@ TABLESPACE pg_default;
 
 ALTER TABLE training.self_reflection_status
     OWNER to postgres;
+
+
+CREATE SEQUENCE training.application_sequence
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.application_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.dept_role_app_sequence
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.dept_role_app_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.dept_role_sequence
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.dept_role_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.dept_sequence
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.dept_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.menu_item_sequence
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.menu_item_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.qa_user_self_reflection_form_sequence
+    INCREMENT 1
+    START 65
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.qa_user_self_reflection_form_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.qa_user_self_reflection_form_status_sequence
+    INCREMENT 1
+    START 58
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.qa_user_self_reflection_form_status_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.role_sequence
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.role_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.self_rating_question_sequence
+    INCREMENT 1
+    START 50
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.self_rating_question_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.self_rating_sequence
+    INCREMENT 1
+    START 79
+    MINVALUE 1
+    MAXVALUE 9999999
+    CACHE 1;
+
+ALTER SEQUENCE training.self_rating_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.self_reflection_review_sequence
+    INCREMENT 1
+    START 50
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.self_reflection_review_sequence
+    OWNER TO postgres;
+
+
+CREATE SEQUENCE training.self_reflection_status_sequence
+    INCREMENT 1
+    START 50
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE training.self_reflection_status_sequence
+    OWNER TO postgres;
